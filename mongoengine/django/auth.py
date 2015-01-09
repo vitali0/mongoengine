@@ -233,6 +233,9 @@ class User(Document):
     user_permissions = ListField(ReferenceField(Permission), verbose_name=_('user permissions'),
                                                 help_text=_('Permissions for the user.'))
 
+    groups = ListField(ReferenceField(Group), verbose_name=_('user groups'),
+                                                help_text=_('Groups for the user.'))
+
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email']
 
