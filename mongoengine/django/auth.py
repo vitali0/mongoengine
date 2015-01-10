@@ -18,6 +18,10 @@ REDIRECT_FIELD_NAME = 'next'
 MONGOENGINE_USER_COLLECTION = getattr(
     settings, 'MONGOENGINE_USER_COLLECTION', 'user')
 
+# a setting for the name of the collection used to groups documents
+MONGOENGINE_GROUP_COLLECTION = getattr(
+    settings, 'MONGOENGINE_GROUP_COLLECTION', 'group')
+
 try:
     from django.contrib.auth.hashers import check_password, make_password
 except ImportError:
@@ -156,6 +160,8 @@ class Group(Document):
     """
     name = StringField(max_length=80, unique=True, verbose_name=_('name'))
     permissions = ListField(ReferenceField(Permission, verbose_name=_('permissions'), required=False))
+
+    meta = {'collection': MONGOENGINE_GROUP_COLLECTION}
 
     class Meta:
         verbose_name = _('group')
