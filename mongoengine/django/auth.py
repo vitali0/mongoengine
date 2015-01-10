@@ -3,14 +3,20 @@ from mongoengine import *
 from django.utils.encoding import smart_str
 from django.contrib.auth.models import _user_has_perm, _user_get_all_permissions, _user_has_module_perms
 from django.db import models
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentTypeManager
 from django.contrib import auth
+
 from django.contrib.auth.models import AnonymousUser
 from django.utils.translation import ugettext_lazy as _
 
 from .utils import datetime_now
 
 REDIRECT_FIELD_NAME = 'next'
+
+# a setting for the name of the collection used to users documents
+MONGOENGINE_USER_COLLECTION = getattr(
+    settings, 'MONGOENGINE_USER_COLLECTION', 'user')
 
 try:
     from django.contrib.auth.hashers import check_password, make_password
@@ -243,7 +249,8 @@ class User(Document):
         'allow_inheritance': True,
         'indexes': [
             {'fields': ['username'], 'unique': True, 'sparse': True}
-        ]
+        ],
+        'collection': MONGOENGINE_USER_COLLECTION
     }
 
     def __unicode__(self):
